@@ -1,4 +1,4 @@
-venv_basket
+venv_sm
 *.py[cod]
 
 # C extensions
@@ -47,3 +47,4 @@ local.py
 flags
 *.db
 data
+*.sqlite
