@@ -13,6 +13,7 @@ install_requires = [
     'zope.sqlalchemy',
     'pyramid_debugtoolbar',
     'pyramid_tm',
+    'mock',
 ]
 dependency_links = [
 
@@ -28,7 +29,7 @@ if __name__ == '__main__':
           include_package_data=True,
           entry_points="""\
             [paste.app_factory]
-                main = sm:main
+                main = sm.application:main
             [console_scripts]
                 initialize_sm_db = sm.scripts.initializedb:main
           """,

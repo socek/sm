@@ -28,6 +28,6 @@ test: $(setup)
 	@py.test --tb=native src
 
 cov: $(setup)
-	@py.test --tb=native --cov-report html --cov-config pytest.ini src
+	@py.test --tb=native --cov-report html --cov-config pytest.ini src --cov sm
 
 
