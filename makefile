@@ -7,9 +7,11 @@ devel.ini := src/development.ini
 initialize_db := ./$(venv)/bin/initialize_sm_db
 
 server: $(database)
-	@pserve $(devel.ini)
+	@pserve $(devel.ini) --reload
 
 $(database): $(setup)
+	@echo "Initializing db..."
+	@rm -f src/sm.sqlite
 	@$(initialize_db) $(devel.ini)
 
 develop: $(setup)

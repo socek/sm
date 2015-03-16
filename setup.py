@@ -14,6 +14,8 @@ install_requires = [
     'pyramid_debugtoolbar',
     'pyramid_tm',
     'mock',
+    'deform',
+    'pyramid_beaker',
 ]
 dependency_links = [
 

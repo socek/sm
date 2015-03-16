@@ -1,0 +1,12 @@
+{% extends "templates/head.jinja2" %}
+{% block css %}{% endblock %}
+{% block content %}
+<p>Please login:</p>
+{% if error %}
+    <div class="alert alert-danger">
+        <div class="errorMsgLbl">{{error}}</div>
+      <p class="errorMsg"></p>
+    </div>
+{% endif %}
+{{form | safe}}
+{% endblock %}

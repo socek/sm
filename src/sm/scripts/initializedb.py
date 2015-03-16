@@ -7,14 +7,16 @@ from sqlalchemy import engine_from_config
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
-    )
+)
 
 from pyramid.scripts.common import parse_vars
 
 from sm.db import (
     DBSession,
     Base,
-    )
+)
+
+from sm.auth.models import User
 
 
 def usage(argv):
@@ -35,6 +37,10 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
 
-    # with transaction.manager:
-    #     model = MyModel(name='one', value=1)
-    #     DBSession.add(model)
+    with transaction.manager:
+        user = User(name='user', password='user1', permission='logged')
+        DBSession.add(user)
+
+        admin = User(
+            name='admin', password='admin1', permission='administrator')
+        DBSession.add(admin)
