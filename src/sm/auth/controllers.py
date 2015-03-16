@@ -13,11 +13,13 @@ class AuthController(object):
 
     def __init__(self, request):
         self.request = request
-        self.context = {'error': None}
+        self._cache = {}
+        self.context = {
+            'error': None,
+        }
         self.route = request.route_path
         self.db = DBSession
         self.session = self.request.session
-        self._cache = {}
 
     def get_logged_user(self):
         if 'user' in self._cache:
@@ -110,5 +112,7 @@ class AfterLogin(AuthController):
     def __call__(self):
         if not self._is_logged():
             return HTTPFound(location=self.route('auth_login'))
+
+        self.context['user'] = self.get_logged_user()
 
         return self.context

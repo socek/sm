@@ -1,5 +1,8 @@
-{% extends "templates/head.jinja2" %}
-{% block css %}{% endblock %}
-{% block content %}
-ELO
-{% endblock %}
+{% if user.permission == 'logged' %}
+    {% include "logged.jinja2" %}
+{% endif %}
+{% if user.permission == 'administrator' %}
+    {% include "admin.jinja2" %}
+{% endif %}
+
+

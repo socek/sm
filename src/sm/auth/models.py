@@ -17,6 +17,6 @@ class User(Base):
 
 class NotLoggedUser(User):
     id = None
-    name = None
+    name = 'not logged user'
     password = None
     permission = 'not logged'
