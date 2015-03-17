@@ -55,6 +55,7 @@ class AuthController(object):
 class LoginController(AuthController):
 
     def __call__(self):
+        self.db.expire_all()
         self.context['users'] = self.get_all_users()
         self.process_form()
 
@@ -114,6 +115,7 @@ class LoginController(AuthController):
 class AfterLoginController(AuthController):
 
     def __call__(self):
+        self.db.expire_all()
         if not self._is_logged():
             return HTTPFound(location=self.route('auth_login'))
 
@@ -126,5 +128,6 @@ class AfterLoginController(AuthController):
 class LogoutController(AuthController):
 
     def __call__(self):
+        self.db.expire_all()
         self.session.clear()
         return HTTPFound(location=self.route('auth_login'))
