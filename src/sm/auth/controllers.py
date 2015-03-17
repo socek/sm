@@ -52,7 +52,7 @@ class AuthController(object):
 
 
 @view_config(route_name='auth_login', renderer='templates/auth/login.jinja2')
-class Login(AuthController):
+class LoginController(AuthController):
 
     def __call__(self):
         self.process_form()
@@ -65,12 +65,10 @@ class Login(AuthController):
     def process_form(self):
         schema = LoginForm()
         form = Form(schema, buttons=('submit',))
-        values = self.get_form_data(form)
-        if values:
-            self.submit_form(values)
-
+        data = self.get_form_data(form)
+        self.submit_form(data)
         self.context['form'] = form.render()
-        self.context['values'] = values
+        self.context['values'] = data
 
     def get_form_data(self, form):
         if 'submit' in self.request.POST:
@@ -88,6 +86,8 @@ class Login(AuthController):
             return None
 
     def submit_form(self, values):
+        if not values:
+            return
         session = self.request.session
 
         try:
@@ -107,7 +107,7 @@ class Login(AuthController):
 @view_config(
     route_name='auth_after_login',
     renderer='templates/auth/after_login.jinja2')
-class AfterLogin(AuthController):
+class AfterLoginController(AuthController):
 
     def __call__(self):
         if not self._is_logged():

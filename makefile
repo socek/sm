@@ -27,9 +27,9 @@ $(setup): flags $(venv) setup.py
 	@touch $@
 
 test: $(setup)
-	@py.test --tb=native src
+	@$(pytest) --tb=native src
 
 cov: $(setup)
-	@py.test --tb=native --cov-report html --cov-config pytest.ini src --cov sm
+	@$(pytest) --tb=native --cov-report html --cov-config pytest.ini src --cov sm
 
 
