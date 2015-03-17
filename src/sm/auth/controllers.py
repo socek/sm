@@ -55,12 +55,16 @@ class AuthController(object):
 class LoginController(AuthController):
 
     def __call__(self):
+        self.context['users'] = self.get_all_users()
         self.process_form()
 
         if self._is_logged():
             return HTTPFound(location=self.route('auth_after_login'))
 
         return self.context
+
+    def get_all_users(self):
+        return self.db.query(User)
 
     def process_form(self):
         schema = LoginForm()
@@ -116,3 +120,11 @@ class AfterLoginController(AuthController):
         self.context['user'] = self.get_logged_user()
 
         return self.context
+
+
+@view_config(route_name='auth_logout', renderer='templates/auth/login.jinja2')
+class LogoutController(AuthController):
+
+    def __call__(self):
+        self.session.clear()
+        return HTTPFound(location=self.route('auth_login'))

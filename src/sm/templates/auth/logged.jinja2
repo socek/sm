@@ -1,3 +1,9 @@
 {% extends "templates/head.jinja2" %}
-{% block css %}{% endblock %}
-{% block content %}This is logged!{% endblock %}
+{% block css %}
+    <link href="{{request.static_url('sm:static/user.css')}}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="parent">
+    <div class="singlebox"></div>
+</div>
+{% endblock %}

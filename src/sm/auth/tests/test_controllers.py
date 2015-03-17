@@ -3,8 +3,9 @@ from mock import MagicMock, patch
 from sqlalchemy.orm.exc import NoResultFound
 from deform import ValidationFailure
 
-from ..models import NotLoggedUser
+from ..models import NotLoggedUser, User
 from ..controllers import AuthController, LoginController, AfterLoginController
+from ..controllers import LogoutController
 
 
 class LocalFixtures(object):
@@ -15,7 +16,7 @@ class LocalFixtures(object):
         request.session = {}
         return request
 
-    @yield_fixture
+    @yield_fixture(autouse=True)
     def db(self, ctrl):
         with patch.object(ctrl, 'db') as mock:
             yield mock
@@ -142,7 +143,18 @@ class TestLoginController(LocalFixtures):
         with patch.object(ctrl, 'submit_form') as mock:
             yield mock
 
-    def test_call_not_logged(self, request, ctrl, is_logged, process_form):
+    @yield_fixture
+    def users(self, ctrl):
+        with patch.object(ctrl, 'get_all_users') as mock:
+            yield mock
+
+    def test_call_not_logged(
+            self,
+            request,
+            ctrl,
+            is_logged,
+            process_form,
+            users):
         """
         LoginController should proccess form and return context
         if user is not logged.
@@ -152,7 +164,8 @@ class TestLoginController(LocalFixtures):
         context = ctrl()
 
         process_form.assert_called_once_with()
-        assert context == {'error': None}
+        assert context == {'error': None, 'users': users.return_value}
+        users.assert_called_once_with()
 
     def test_call_logged(self, request, ctrl, is_logged, process_form, found):
         """
@@ -280,8 +293,16 @@ class TestLoginController(LocalFixtures):
         assert ctrl.context == {'error': None}
         assert session['user_id'] == user.id
 
+    def test_get_all_users(self, ctrl, db):
+        """
+        .get_all_users should return all users from the db.
+        """
+        result = ctrl.get_all_users()
+        assert result == db.query.return_value
+        db.query.assert_called_once_with(User)
 
-class TestAfterLoginControllerController(LocalFixtures):
+
+class TestAfterLoginController(LocalFixtures):
 
     @fixture
     def ctrl(self, request):
@@ -315,3 +336,24 @@ class TestAfterLoginControllerController(LocalFixtures):
             'error': None,
             'user': user.return_value
         }
+
+
+class TestLogoutController(LocalFixtures):
+
+    @fixture
+    def ctrl(self, request):
+        return LogoutController(request)
+
+    def test_call(self, ctrl, request, found):
+        """
+        LogoutController should clear all session data and redirect to
+        auth_login.
+        """
+        session = MagicMock()
+        ctrl.session = session
+        assert ctrl() == found.return_value
+        found.assert_called_once_with(
+            location=request.route_path.return_value
+        )
+        request.route_path.assert_called_once_with('auth_login')
+        session.clear.assert_called_once_with()

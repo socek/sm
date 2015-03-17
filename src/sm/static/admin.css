@@ -1,0 +1,22 @@
+body {
+    background-color: blue;
+}
+div.parent {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+div.parent div {
+    background-color: yellow;
+    width: 100px;
+    height: 100px;
+}
+
+div.parent div.left {
+    float: left;
+}
+
+div.parent div.right {
+    float: right;
+}

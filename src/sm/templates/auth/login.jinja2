@@ -1,6 +1,12 @@
 {% extends "templates/head.jinja2" %}
 {% block css %}{% endblock %}
 {% block content %}
+<p>Avalible users:</p>
+<ul>
+    {% for user in users %}
+        <li>Name: "{{user.name}}" Password: "{{user.password}}"</li>
+    {% endfor %}
+</ul>
 <p>Please login:</p>
 {% if error %}
     <div class="alert alert-danger">

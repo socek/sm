@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 install_requires = [
     'pyramid',
     'pyramid_jinja2',
-    # 'uwsgi',
+    'uwsgi',
     'pytest-cov',
     'pytest',
     'ipdb',

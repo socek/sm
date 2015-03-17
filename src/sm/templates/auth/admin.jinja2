@@ -1,3 +1,10 @@
 {% extends "templates/head.jinja2" %}
-{% block css %}{% endblock %}
-{% block content %}This is admin!{% endblock %}
+{% block css %}
+    <link href="{{request.static_url('sm:static/admin.css')}}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <div class="parent">
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+{% endblock %}
