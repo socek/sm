@@ -5,9 +5,10 @@ setup := flags/setup.py
 database := src/sm.sqlite
 devel.ini := src/development.ini
 initialize_db := ./$(venv)/bin/initialize_sm_db
+pserve := ./$(venv)/bin/pserve
 
 server: $(database)
-	@pserve $(devel.ini) --reload
+	@$(pserve) $(devel.ini) --reload
 
 $(database): $(setup)
 	@echo "Initializing db..."
