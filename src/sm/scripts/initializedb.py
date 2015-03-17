@@ -1,6 +1,7 @@
 import os
 import sys
 import transaction
+from datetime import datetime
 
 from sqlalchemy import engine_from_config
 
@@ -17,6 +18,7 @@ from sm.db import (
 )
 
 from sm.auth.models import User
+from sm.table.models import Table
 
 
 def usage(argv):
@@ -44,3 +46,9 @@ def main(argv=sys.argv):
         admin = User(
             name='admin', password='admin1', permission='administrator')
         DBSession.add(admin)
+
+        sample = Table(
+            timestamp=datetime.now().isoformat(),
+            user_agent='Mozzila',
+            window_size='100x100')
+        DBSession.add(sample)

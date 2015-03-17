@@ -8,7 +8,7 @@ from ..controllers import AuthController, LoginController, AfterLoginController
 from ..controllers import LogoutController
 
 
-class LocalFixtures(object):
+class GlobalFixtures(object):
 
     @fixture
     def request(self):
@@ -24,6 +24,9 @@ class LocalFixtures(object):
     @fixture
     def session(self, request):
         return request.session
+
+
+class LocalFixtures(GlobalFixtures):
 
     @fixture
     def user(self, ctrl):

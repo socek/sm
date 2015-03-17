@@ -1,0 +1,45 @@
+{% extends "templates/head.jinja2" %}
+{% block css %}{% endblock %}
+{% block content %}
+    <table id="myTable">
+        <thead>
+            <tr>
+                <td>Timestamp</td>
+                <td>User Agent</td>
+                <td>Window Size</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in objects %}
+                <tr>
+                    <td>{{object.timestamp}}</td>
+                    <td>{{object.user_agent}}</td>
+                    <td>{{object.window_size}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button id="add_new">Add new</button>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var table = $('#myTable').DataTable({
+                "order": [[ 0, "desc" ]]
+            });
+
+            $('#add_new').click(function(){
+                var width = $( window ).width();
+                var height = $( window ).height();
+                $.ajax({
+                    url: "/table/add/" + width +"/"+ height,
+                }).done(function(result) {
+                    var obj = result.object;
+                    table.row.add( [
+                        obj.timestamp,
+                        obj.user_agent,
+                        obj.window_size
+                    ] ).draw();
+                });
+            });
+        });
+    </script>
+{% endblock %}
