@@ -21,7 +21,7 @@ flags:
 	@mkdir flags
 
 $(venv):
-	@virtualenv --no-site-packages $(venv)
+	@virtualenv -p python3 --no-site-packages $(venv)
 
 $(setup): flags $(venv) setup.py
 	@$(py) setup.py develop
